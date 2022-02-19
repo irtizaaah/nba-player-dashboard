@@ -1,0 +1,135 @@
+:root{
+    --text-color: #232C38;
+    --background-color: #fdfdfd;
+    --input-color: #eeeeee;
+    --accent-color: #FC4F4F;
+}
+
+* /* Remove all default formatting */
+{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Lato';
+    font-weight: 400;
+}
+
+h1,h2,h3,h4,h5,h6{
+    color: var(--text-color);
+}
+
+body{
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+li{
+    list-style: none;
+    color: var(--text-color);
+}
+
+button{
+    border: none;
+    background-color: transparent;
+    padding: 1rem;
+    border-radius: 10px;
+    color: var(--background-color);
+    background-color: var(--accent-color);
+}
+input{
+    border: none;
+    border-radius: 10px;
+    width: 300px;
+    padding: 1rem;
+    background-color: var(--input-color);
+}
+
+header{
+    display: flex;
+    flex-wrap: wrap;
+    width: 90vw;
+    justify-content: space-between;
+    align-items: center;
+}
+.search_bar{
+    margin: 2rem;
+}
+
+.player_header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin: 2rem;
+}
+
+.player_header-block{
+    position: absolute;
+    z-index: -1;
+    transform: rotate(160deg);
+    border-radius: 100%;
+    width: 400px;
+    height: 200px;
+
+    background: linear-gradient(-45deg, #FC4F4F, #9C0F48, #A73489, #FC4F4F);
+	background-size: 300%;
+	animation: animated_color 10s ease-in-out infinite;
+	-moz-animation: animated_color 10s ease-in-out infinite;
+	-webkit-animation: animated_color 10s ease-in-out infinite;
+}
+
+.player_header-image{
+    width: 300px;
+}
+
+.player_header-name{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.name-first{
+    font-weight: 700;
+    font-size: 4rem;
+}
+
+.name-last{
+    font-weight: 900;
+    font-size: 5rem;
+
+    background: linear-gradient(-45deg, #FC4F4F, #9C0F48, #A73489, #FC4F4F);
+	background-size: 300%;
+	text-transform: uppercase;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	animation: animated_color 5s ease-in-out infinite;
+	-moz-animation: animated_color 5s ease-in-out infinite;
+	-webkit-animation: animated_color 5s ease-in-out infinite;
+}
+
+.player_bio{
+    display: none;
+}
+
+.player_stats{
+    display: flex;
+    width: 40vw;
+    justify-content: space-between;
+    font-weight: 900;
+    font-size: 3rem;
+}
+
+@keyframes animated_color{
+	0% { background-position: 0px 50%; }
+	50% { background-position: 100% 50%; }
+	100% { background-position: 0px 50%; }
+}
+
+@media only screen and (max-width: 816px) {
+    .nav_bar{
+        display: block;
+        margin: 0rem 0rem 0rem
+    }
+}

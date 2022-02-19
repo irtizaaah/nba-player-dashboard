@@ -8,11 +8,11 @@ function searchPlayer(){
     let playerIdForImage;
     let playerBio;
     let playerStats;
-    let year = 2021;
+    let year = new Date().getFullYear() - 1;
     // nba api: "https://data.nba.net/data/10s/prod/v1/" + year + "/players/" + "1629630" + "_profile.json"
+    // ttps://data.nba.net/data/10s/prod/v1/2021/teams.json
 
     playerName = document.querySelector(".search_bar-text").value;
-    document.querySelector(".player_name").innerHTML = playerName;
 
     async function fetchEverything() {
         try {
@@ -77,17 +77,38 @@ function searchPlayer(){
             console.log("fetch failed", err);
         }
 
-        document.querySelector(".player_position").innerHTML = playerBio.position;
-        document.querySelector(".player_team").innerHTML = playerBio.team.full_name;
-        document.querySelector(".player_height").innerHTML = playerBio.weight_pounds;
-        document.querySelector(".player_weight").innerHTML = playerBio.height_feet + "\'" + playerBio.height_inches + "\"";
+        document.querySelector(".player_bio-position").innerHTML = playerBio.position;
+        document.querySelector(".player_bio-team").innerHTML = playerBio.team.full_name;
+        document.querySelector(".player_bio-height").innerHTML = playerBio.weight_pounds;
+        document.querySelector(".player_bio-weight").innerHTML = playerBio.height_feet + "\'" + playerBio.height_inches + "\"";
         
-        document.querySelector(".player_points").innerHTML = playerStats.pts;
-        document.querySelector(".player_assists").innerHTML = playerStats.ast;
-        document.querySelector(".player_steals").innerHTML = playerStats.stl;
-        document.querySelector(".player_blocks").innerHTML = playerStats.blk; 
+        for (var i = 0; i <= Math.round(playerStats.pts); i++) {
+            (function(index) {
+                setTimeout(function (){document.querySelector(".player_stats-points").innerHTML = index}, i*35);
+            })(i);
+        }
 
-        document.querySelector(".player_image").src = "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/" + playerIdForImage + ".png"; 
+        for (var i = 0; i <= Math.round(playerStats.ast); i++) {
+            (function(index) {
+                setTimeout(function (){document.querySelector(".player_stats-assists").innerHTML = index;}, i*35);
+            })(i);
+        }
+
+        for (var i = 0; i <= Math.round(playerStats.stl); i++) {
+            (function(index) {
+                setTimeout(function (){document.querySelector(".player_stats-steals").innerHTML = index;}, i*35);
+            })(i);
+        }
+
+        for (var i = 0; i <= Math.round(playerStats.blk); i++) {
+            (function(index) {
+                setTimeout(function (){document.querySelector(".player_stats-blocks").innerHTML = index;}, i*35);
+            })(i);
+        }
+
+        document.querySelector(".player_header-image").src = "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/" + playerIdForImage + ".png"; 
+        document.querySelector(".name-first").innerHTML = playerFirstName; 
+        document.querySelector(".name-last").innerHTML = playerLastName; 
 
     }
 
