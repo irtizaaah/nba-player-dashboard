@@ -2,6 +2,7 @@ import NbaPlayer from "./nba-player.js";
 import * as nbaAPI from "./nba-api.js";
 
 function searchPlayer(){
+    document.querySelector(".loading").style.visibility = "visible";
     let name = document.querySelector(".search_bar-text").value;
     let player = new NbaPlayer(name);
     let obj;
@@ -13,19 +14,26 @@ function searchPlayer(){
 
         obj = await nbaAPI.getPlayer(player.getFullName());
         player.setIdAndName(obj.id, obj.first_name, obj.last_name);
+        document.querySelector(".loading").innerHTML = "Loading... 20%";
 
         obj = await nbaAPI.getBio(player.getId());
         player.setBio(obj.position, obj.team.full_name, obj.weight_pounds, obj.height_feet + "\'" + obj.height_inches + "\""); // finds specific value
+        document.querySelector(".loading").innerHTML = "Loading... 40%";
 
         obj = await nbaAPI.getStats(player.getId());
         player.setStats(obj.pts, obj.ast, obj.stl, obj.blk);
+        document.querySelector(".loading").innerHTML = "Loading... 60%";
 
         url = await nbaAPI.getImage(player.getFirstName(), player.getLasttName());
         player.setImage(url);
+        document.querySelector(".loading").innerHTML = "Loading... 80%";
 
         list = await nbaAPI.getPointsHistory(player.getId());
         player.setPointsHistory(list);
+        document.querySelector(".loading").innerHTML = "Loading... 100%";
         
+        document.querySelector(".loading").style.visibility = "hidden";
+        document.querySelector(".loading").innerHTML = "Loading...";
         document.querySelector(".player_header").style.visibility = "visible";
         document.querySelector(".player_stats-container").style.visibility = "visible";
         document.querySelector(".chart_container").style.visibility = "visible";

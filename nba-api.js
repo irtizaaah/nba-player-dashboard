@@ -60,13 +60,13 @@ export async function getPointsHistory(id){
         const response = await fetch("https://www.balldontlie.io/api/v1/stats?seasons[]=" + year + "&player_ids[]=" + id + "&postseason=false"); // returns promise
         const obj = JSON.parse(await response.text()); // converts value in promise to JSON
 
-        let pointHistory = [0];
+        let pointsHistory = [obj.data[0].pts];
         
-        for(let i = 0; i < obj.data.length; i++){
-            pointHistory.push(obj.data[i].pts);
+        for(let i = 1; i < obj.data.length; i++){
+            pointsHistory.push(obj.data[i].pts);
         }
 
-        return pointHistory;
+        return pointsHistory;
 
     }
     catch (err) {

@@ -1,5 +1,6 @@
 :root{
     --text-color: #232C38;
+    --loading-background-color: #eeeeee;
 
     --stats_background-color: #232C38;
     --stats_value-color: #fdfdfd;
@@ -9,6 +10,8 @@
 
     --background-color: #fdfdfd;
     --input-color: #eeeeee;
+
+
     --accent-color: #FC4F4F;
 }
 
@@ -69,6 +72,15 @@ canvas{
 
 .search_bar{
     margin: 2rem;
+}
+
+.loading{
+    visibility: hidden;
+    background-color: var(--loading-background-color);
+    text-align: center;
+    padding: 1rem;
+    width: 10rem;
+    border-radius: 10px;
 }
 
 .player_header{
