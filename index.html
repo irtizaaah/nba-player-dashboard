@@ -28,6 +28,7 @@
     <div class = "player_header">
         <div class = "player_header-block"></div>
         <img class = "player_header-image" src="" alt="">
+        <div class = "player_header-block-2"></div>
         <div class = "player_header-name">
             <h1 class = "name-first"></h1>
             <h1 class = "name-last"></h1>
@@ -39,11 +40,33 @@
         <li class = "player_bio-height"></li>
         <li class = "player_bio-weight"></li>
     </ul>
-    <ul class = "player_stats"> 
-        <li class = "player_stats-points"></li>
-        <li class = "player_stats-assists"></li>
-        <li class = "player_stats-steals"></li>
-        <li class = "player_stats-blocks"></li>
-    </ul>
+    <div class = "player_stats-container">
+        <ul class = "player_stats">
+            <li class = "player_stats-points stat_item">
+                <ul>
+                    <li class = "points-value value"></li>
+                    <li class = "points-label label"><p>Points</p></li>
+                </ul>
+            </li>
+            <li class = "player_stats-assists stat_item">
+                <ul>
+                    <li class = "assists-value value"></li>
+                    <li class = "assists-label label"><p>Assists</p></li>
+                </ul>
+            </li>
+            <li class = "player_stats-steals stat_item">
+                <ul>
+                    <li class = "steals-value value"></li>
+                    <li class = "steals-label label"><p>Steals</p></li>
+                </ul>
+            </li>
+            <li class = "player_stats-blocks stat_item">
+                <ul>
+                    <li class = "blocks-value value"></li>
+                    <li class = "blocks-label label"><p>Blocks</p></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
 </body>
 </html>

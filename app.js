@@ -1,115 +1,59 @@
-function searchPlayer(){
-    let playerName;
-    let playerFirstName;
-    let playerLastName;
-    let playerId;
-    let nbaPlayerList;
-    let specificPlayerFromNbaPlayerList;
-    let playerIdForImage;
-    let playerBio;
-    let playerStats;
-    let year = new Date().getFullYear() - 1;
-    // nba api: "https://data.nba.net/data/10s/prod/v1/" + year + "/players/" + "1629630" + "_profile.json"
-    // ttps://data.nba.net/data/10s/prod/v1/2021/teams.json
+import NbaPlayer from "./nba-player.js";
+import * as nbaAPI from "./nba-api.js";
 
-    playerName = document.querySelector(".search_bar-text").value;
+function searchPlayer(){
+    let name = document.querySelector(".search_bar-text").value;
+    let player = new NbaPlayer(name);
+    let obj;
+    let url;
+    let color = ["#FC4F4F","#9C0F48","#A73489","#FC4F4F"];
 
     async function fetchEverything() {
-        try {
-            const response = await fetch("https://www.balldontlie.io/api/v1/players?search=" + playerName); // returns promise
-            const obj = JSON.parse(await response.text()); // converts value in promise to JSON
-            playerId = obj.data[0].id; // finds specific value
-        }
-        catch (err) {
-            console.log("fetch failed", err);
-        }
 
-        try {
-            const response = await fetch("https://www.balldontlie.io/api/v1/players?search=" + playerName); // returns promise
-            const obj = JSON.parse(await response.text()); // converts value in promise to JSON
-            playerId = obj.data[0].id; // finds specific value
-        }
-        catch (err) {
-            console.log("fetch failed", err);
-        }
+        obj = await nbaAPI.getPlayer(player.getFullName());
+        player.setIdAndName(obj.id, obj.first_name, obj.last_name);
 
-        try {
-            const response = await fetch("https://www.balldontlie.io/api/v1/players?search=" + playerName); // returns promise
-            const obj = JSON.parse(await response.text()); // converts value in promise to JSON
-            playerFirstName = obj.data[0].first_name; // finds specific value
-            playerLastName = obj.data[0].last_name; // finds specific value
-        }
-        catch (err) {
-            console.log("fetch failed", err);
-        }
-    
-        try {
-            const response = await fetch("https://www.balldontlie.io/api/v1/players/" + playerId); // returns promise
-            const obj = JSON.parse(await response.text()); // converts value in promise to JSON
-            playerBio = obj; // finds specific value
-        }
-        catch (err) {
-            console.log("fetch failed", err);
-        }
+        obj = await nbaAPI.getBio(player.getId());
+        player.setBio(obj.position, obj.team.full_name, obj.weight_pounds, obj.height_feet + "\'" + obj.height_inches + "\""); // finds specific value
 
-        try {
-            const response = await fetch("https://www.balldontlie.io/api/v1/season_averages?player_ids[]=" + playerId); // returns promise
-            const obj = JSON.parse(await response.text()); // converts value in promise to JSON
-            playerStats = obj.data[0]; // finds specific value
-            console.log(playerStats);
-        }
-        catch (err) {
-            console.log("fetch failed", err);
-        }
+        obj = await nbaAPI.getStats(player.getId());
+        player.setStats(obj.pts, obj.ast, obj.stl, obj.blk);
 
-        try {
-            const response = await fetch("http://data.nba.net/data/10s/prod/v1/" + year + "/players.json"); // returns promise
-            const obj = JSON.parse(await response.text()); // converts value in promise to JSON
-            nbaPlayerList = obj.league.standard; // finds specific value
-            specificPlayerFromNbaPlayerList = nbaPlayerList.filter(
-                    function(nbaPlayerList){
-                        return (nbaPlayerList.firstName == playerFirstName && nbaPlayerList.lastName == playerLastName)
-                    });
-            
-            playerIdForImage = specificPlayerFromNbaPlayerList[0].personId;
-        }
-        catch (err) {
-            console.log("fetch failed", err);
-        }
-
-        document.querySelector(".player_bio-position").innerHTML = playerBio.position;
-        document.querySelector(".player_bio-team").innerHTML = playerBio.team.full_name;
-        document.querySelector(".player_bio-height").innerHTML = playerBio.weight_pounds;
-        document.querySelector(".player_bio-weight").innerHTML = playerBio.height_feet + "\'" + playerBio.height_inches + "\"";
+        url = await nbaAPI.getImage(player.getFirstName(), player.getLasttName());
+        player.setImage(url);
         
-        for (var i = 0; i <= Math.round(playerStats.pts); i++) {
+        document.querySelector(".player_header").style.visibility = "visible";
+        document.querySelector(".player_header-block").style.background = "linear-gradient(-45deg, " + color[0] + "," + color[1] + "," + color[2] + "," + color[3];
+        document.querySelector(".player_header-block").style.backgroundSize = "300%";
+        document.querySelector(".player_header-block").style.animation = "animated_color 10s ease-in-out infinite";
+
+        document.querySelector(".player_bio-position").innerHTML = player.position;
+        document.querySelector(".player_bio-team").innerHTML = player.team;
+        document.querySelector(".player_bio-height").innerHTML = player.height;
+        document.querySelector(".player_bio-weight").innerHTML = player.weight;
+        
+        await countAnimation(".points-value", player.getPoints(), 70);
+        await countAnimation(".assists-value", player.getAssits(), 300);
+        await countAnimation(".steals-value", player.getSteals(), 800);
+        await countAnimation(".blocks-value", player.getBlocks(), 800);
+        
+
+        document.querySelector(".player_header-image").src = player.getImage(); 
+        document.querySelector(".name-first").innerHTML = player.getFirstName(); 
+        document.querySelector(".name-last").innerHTML = player.getLasttName(); 
+
+    }
+
+    let countAnimation = (querySelection, targetNumber, speed)=>{
+        let i = 0;
+        while(i <= targetNumber) {
             (function(index) {
-                setTimeout(function (){document.querySelector(".player_stats-points").innerHTML = index}, i*35);
+                setTimeout(function (){document.querySelector(querySelection).innerHTML = index;}, i*speed);
             })(i);
+
+            i = i + 0.01;
+            i = Math.round(i * 100) / 100; // round to 2 decimal places
         }
-
-        for (var i = 0; i <= Math.round(playerStats.ast); i++) {
-            (function(index) {
-                setTimeout(function (){document.querySelector(".player_stats-assists").innerHTML = index;}, i*35);
-            })(i);
-        }
-
-        for (var i = 0; i <= Math.round(playerStats.stl); i++) {
-            (function(index) {
-                setTimeout(function (){document.querySelector(".player_stats-steals").innerHTML = index;}, i*35);
-            })(i);
-        }
-
-        for (var i = 0; i <= Math.round(playerStats.blk); i++) {
-            (function(index) {
-                setTimeout(function (){document.querySelector(".player_stats-blocks").innerHTML = index;}, i*35);
-            })(i);
-        }
-
-        document.querySelector(".player_header-image").src = "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/" + playerIdForImage + ".png"; 
-        document.querySelector(".name-first").innerHTML = playerFirstName; 
-        document.querySelector(".name-last").innerHTML = playerLastName; 
-
     }
 
     fetchEverything();
