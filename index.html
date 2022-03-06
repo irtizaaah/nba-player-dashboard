@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
 
     <link rel="icon" href="🏀"> 
+    
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="">
     
@@ -72,8 +73,28 @@
             </li>
         </ul>
     </div>
-    <div class = "chart_container">
-        <canvas class ="radar_chart" height = "100" width = "100"></canvas>
+    <div class = "points_history">
+        <h1 class = "points_history-header">Point History</h1>
+        <canvas class ="points_history-chart" height = "100" width = "100"></canvas>
+    </div>
+    <div class = "efficiency">
+        <h1 class = "efficiency-header">Efficiency</h1>
+        <div class = "efficiency-tp">
+            <canvas class ="tp-chart" height = "100" width = "100"></canvas>
+            <h1 class = "tp-label">3 Pointers</h1>
+            <p class = "tp-percentage"></p>
+        </div>
+        <div class = "efficiency-fg">
+            <canvas class ="fg-chart" height = "100" width = "100"></canvas>
+            <h1 class = "fg-label">Field Goals</h1>
+            <p class = "fg-percentage"></p>
+        </div>
+        <div class = "efficiency-ft">
+            <canvas class ="ft-chart" height = "100" width = "100"></canvas>
+            <h1 class = "ft-label">Free Throws</h1>
+            <p class = "ft-percentage"></p>
+        </div>
     </div>
 </body>
+<footer class = "footer">© NBA PLayer Stats</footer>
 </html>

@@ -23,6 +23,36 @@ class NbaPlayer{
         this.setSteals(steals);
     }
 
+    setShots(freeThrowsAttempted, freeThrowsMade, fieldGoalsAttempted, fieldGoalsMade, threePointersAttempted, threePointersMade){
+        this.setFreeThrowsAttempted(freeThrowsAttempted);
+        this.setFreeThrowsMade(freeThrowsMade);
+        
+        this.setFieldGoalsAttempted(fieldGoalsAttempted);
+        this.setFieldGoalsMade(fieldGoalsMade);
+
+        this.setThreePointersAttempted(threePointersAttempted);
+        this.setThreePointersMade(threePointersMade);
+    }
+
+    setFreeThrowsAttempted(freeThrowsAttempted){
+        this.freeThrowsAttempted  = freeThrowsAttempted;
+    }
+    setFreeThrowsMade(freeThrowsMade){
+        this.freeThrowsMade = freeThrowsMade;
+    }
+    setFieldGoalsAttempted(fieldGoalsAttempted){
+        this.fieldGoalsAttempted = fieldGoalsAttempted;
+    }
+    setFieldGoalsMade(fieldGoalsMade){
+        this.fieldGoalsMade = fieldGoalsMade;
+    }
+    setThreePointersAttempted(threePointersAttempted){
+        this.threePointersAttempted = threePointersAttempted;
+    }
+    setThreePointersMade(threePointersMade){
+        this.threePointersMade = threePointersMade;
+    }
+
     setId(id){
         this.id = id;
     }
@@ -131,6 +161,30 @@ class NbaPlayer{
     }
     getPointsHistory(){
         return this.pointsHistory;
+    }
+
+    getFreeThrowsAttempted(){
+        return this.freeThrowsAttempted;
+    }
+
+    getFreeThrowsMade(){
+        return this.freeThrowsMade;
+    }
+
+    getFieldGoalsAttempted(){
+        return this.fieldGoalsAttempted;
+    }
+
+    getFieldGoalsMade(){
+        return this.fieldGoalsMade;
+    }
+
+    getThreePointersAttempted(){
+        return this.threePointersAttempted;
+    }
+
+    getThreePointersMade(){
+        return this.threePointersMade;
     }
 }
 

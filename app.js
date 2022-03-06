@@ -1,5 +1,20 @@
 import NbaPlayer from "./nba-player.js";
 import * as nbaAPI from "./nba-api.js";
+import * as makeChart from "./make-chart.js"; 
+import * as utility from "./utility.js"; 
+
+document.addEventListener('DOMContentLoaded', function() {
+    const year = new Date().getFullYear() - 1
+    document.querySelector(".footer").innerHTML += " " + year;
+}, false);
+
+var input = document.querySelector(".search_bar-text");
+input.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+   event.preventDefault();
+   document.querySelector(".search_bar-button").click();
+  }
+});
 
 function searchPlayer(){
     document.querySelector(".loading").style.visibility = "visible";
@@ -8,10 +23,17 @@ function searchPlayer(){
     let obj;
     let url;
     let list;
+
+    let pointsHistory;
+    let efficiencyTp;
+    let efficiencyFg;
+    let efficiencyFt;
+
     //let color = ["#FC4F4F","#9C0F48","#A73489","#FC4F4F"];
 
-    async function fetchEverything() {
+    async function getData() {
 
+        // FETCH DATA
         obj = await nbaAPI.getPlayer(player.getFullName());
         player.setIdAndName(obj.id, obj.first_name, obj.last_name);
         document.querySelector(".loading").innerHTML = "Loading... 20%";
@@ -31,16 +53,23 @@ function searchPlayer(){
         list = await nbaAPI.getPointsHistory(player.getId());
         player.setPointsHistory(list);
         document.querySelector(".loading").innerHTML = "Loading... 100%";
+
+        obj = await nbaAPI.getShots(player.getId());
+        player.setShots(obj.fta, obj.ftm, obj.fga, obj.fgm, obj.fg3a, obj.fg3m);
+        document.querySelector(".loading").innerHTML = "Loading... 60%";
         
+        // VISIBILITY 
         document.querySelector(".loading").style.visibility = "hidden";
         document.querySelector(".loading").innerHTML = "Loading...";
         document.querySelector(".player_header").style.visibility = "visible";
         document.querySelector(".player_stats-container").style.visibility = "visible";
-        document.querySelector(".chart_container").style.visibility = "visible";
+        document.querySelector(".points_history").style.visibility = "visible";
+        document.querySelector(".efficiency").style.visibility = "visible";
         // document.querySelector(".player_header-block").style.background = "linear-gradient(-45deg, " + color[0] + "," + color[1] + "," + color[2] + "," + color[3];
         // document.querySelector(".player_header-block").style.backgroundSize = "300%";
         // document.querySelector(".player_header-block").style.animation = "animated_color 10s ease-in-out infinite";
 
+        // DISPLAY DATA
         document.querySelector(".player_bio-position").innerHTML = player.getPosition();
         document.querySelector(".player_bio-team").innerHTML = player.getTeam();
         document.querySelector(".player_bio-height").innerHTML = player.getHeight();
@@ -50,61 +79,26 @@ function searchPlayer(){
         document.querySelector(".name-first").innerHTML = player.getFirstName(); 
         document.querySelector(".name-last").innerHTML = player.getLasttName(); 
 
-        countAnimation(".points-value", player.getPoints(), 50);
-        countAnimation(".assists-value", player.getAssits(), 300);
-        countAnimation(".steals-value", player.getSteals(), 800);
-        countAnimation(".blocks-value", player.getBlocks(), 800);
+        utility.countAnimation(".points-value", player.getPoints(), 50);
+        utility.countAnimation(".assists-value", player.getAssits(), 300);
+        utility.countAnimation(".steals-value", player.getSteals(), 800);
+        utility.countAnimation(".blocks-value", player.getBlocks(), 800);
 
-        const CHART = document.querySelector(".radar_chart");
-        const data = {
-            labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25],
-            datasets: [{
-              label: 'Point History',
-              data: [...player.getPointsHistory()],
-              fill: true,
-              backgroundColor: '#9C0F48',
-              borderColor: 'rgb(255, 99, 132)',
-              pointBackgroundColor: 'rgb(255, 99, 132)',
-              pointBorderColor: '#fff',
-              pointHoverBackgroundColor: '#fff',
-              pointHoverBorderColor: 'rgb(255, 99, 132)'
-            }],
-            scales: {
-                y: {
-                    min: 0,
-                    max: 100
-                }
-            }
-          };
+        pointsHistory = makeChart.historyChart(player.getPointsHistory(), ".points_history-chart", "Point History");
+        efficiencyTp = makeChart.efficiencyChart(player.getThreePointersAttempted(), player.getThreePointersMade(), ".tp-chart", "3 Pointers");
+        efficiencyFg = makeChart.efficiencyChart(player.getFieldGoalsAttempted(), player.getFieldGoalsMade(), ".fg-chart", "Field Goal");
+        efficiencyFt = makeChart.efficiencyChart(player.getFreeThrowsAttempted(), player.getFreeThrowsMade(), ".ft-chart", "Free Throw");
+        
+        document.querySelector(".tp-percentage").innerHTML = Math.round((player.getThreePointersMade()/player.getThreePointersAttempted())*100) + "%"; 
+        document.querySelector(".fg-percentage").innerHTML = Math.round((player.getFieldGoalsMade()/player.getFieldGoalsAttempted())*100) + "%"; 
+        document.querySelector(".ft-percentage").innerHTML = Math.round((player.getFreeThrowsMade()/player.getFreeThrowsAttempted())*100) + "%"; 
 
-          Chart.defaults.font.size = 30;
+        const CHART = document.querySelector(".tp-chart");
 
-        let radarChart = new Chart(CHART, {
-            type: 'line',
-            data: data,
-            options: {
-                elements: {
-                    line: {
-                    borderWidth: 3
-                    }
-                }
-            },
-        });
+
     }
 
-    let countAnimation = (querySelection, targetNumber, speed)=>{
-        let i = 0;
-        while(i <= targetNumber) {
-            (function(index) {
-                setTimeout(function (){document.querySelector(querySelection).innerHTML = index;}, i*speed);
-            })(i);
-
-            i = i + 0.01;
-            i = Math.round(i * 100) / 100; // round to 2 decimal places
-        }
-    }
-
-    fetchEverything();
+    getData();
     
 }
 
