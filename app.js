@@ -6,6 +6,7 @@ function searchPlayer(){
     let player = new NbaPlayer(name);
     let obj;
     let url;
+    let list;
     let color = ["#FC4F4F","#9C0F48","#A73489","#FC4F4F"];
 
     async function fetchEverything() {
@@ -21,8 +22,13 @@ function searchPlayer(){
 
         url = await nbaAPI.getImage(player.getFirstName(), player.getLasttName());
         player.setImage(url);
+
+        list = await nbaAPI.getPointHistory(player.getId());
+        player.setPointHistory(list);
         
         document.querySelector(".player_header").style.visibility = "visible";
+        document.querySelector(".player_stats-container").style.visibility = "visible";
+        document.querySelector(".chart_container").style.visibility = "visible";
         document.querySelector(".player_header-block").style.background = "linear-gradient(-45deg, " + color[0] + "," + color[1] + "," + color[2] + "," + color[3];
         document.querySelector(".player_header-block").style.backgroundSize = "300%";
         document.querySelector(".player_header-block").style.animation = "animated_color 10s ease-in-out infinite";
@@ -31,8 +37,44 @@ function searchPlayer(){
         document.querySelector(".player_bio-team").innerHTML = player.team;
         document.querySelector(".player_bio-height").innerHTML = player.height;
         document.querySelector(".player_bio-weight").innerHTML = player.weight;
+
+        const CHART = document.querySelector(".radar_chart");
+        const data = {
+            labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25],
+            datasets: [{
+              label: 'Point History',
+              data: [...player.getPointHistory()],
+              fill: true,
+              backgroundColor: '#9C0F48',
+              borderColor: 'rgb(255, 99, 132)',
+              pointBackgroundColor: 'rgb(255, 99, 132)',
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: 'rgb(255, 99, 132)'
+            }],
+            scales: {
+                y: {
+                    min: 0,
+                    max: 100
+                }
+            }
+          };
+
+          Chart.defaults.font.size = 30;
+
+        let radarChart = new Chart(CHART, {
+            type: 'line',
+            data: data,
+            options: {
+            elements: {
+                line: {
+                borderWidth: 3
+                }
+            }
+            },
+            });
         
-        await countAnimation(".points-value", player.getPoints(), 70);
+        await countAnimation(".points-value", player.getPoints(), 50);
         await countAnimation(".assists-value", player.getAssits(), 300);
         await countAnimation(".steals-value", player.getSteals(), 800);
         await countAnimation(".blocks-value", player.getBlocks(), 800);

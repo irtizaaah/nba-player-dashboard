@@ -61,6 +61,12 @@ header{
     align-items: center;
     margin: 0 0 5rem 0;
 }
+canvas{
+    width:500px !important;
+    height:500px !important;
+  
+  }
+
 .search_bar{
     margin: 2rem;
 }
@@ -136,9 +142,10 @@ header{
 }
 
 .player_stats-container{
+    visibility: hidden;
     display: flex;
     justify-content: center;
-    background-color: var(--text-color);
+    background-color: var(--stats_background-color);
     width: 100vw;
     padding: 1rem;
 }
@@ -163,6 +170,14 @@ header{
     text-align: center;
     font-size: 1.25rem;
     color: var(--stats_label-color);
+}
+
+.chart_container{
+    visibility: hidden;
+    background-color: var(--stats_background-color);
+    display: flex;
+    justify-content: center;
+    width: 100vw;
 }
 
 @keyframes animated_color{
