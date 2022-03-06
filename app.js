@@ -7,7 +7,7 @@ function searchPlayer(){
     let obj;
     let url;
     let list;
-    let color = ["#FC4F4F","#9C0F48","#A73489","#FC4F4F"];
+    //let color = ["#FC4F4F","#9C0F48","#A73489","#FC4F4F"];
 
     async function fetchEverything() {
 
@@ -23,20 +23,29 @@ function searchPlayer(){
         url = await nbaAPI.getImage(player.getFirstName(), player.getLasttName());
         player.setImage(url);
 
-        list = await nbaAPI.getPointHistory(player.getId());
-        player.setPointHistory(list);
+        list = await nbaAPI.getPointsHistory(player.getId());
+        player.setPointsHistory(list);
         
         document.querySelector(".player_header").style.visibility = "visible";
         document.querySelector(".player_stats-container").style.visibility = "visible";
         document.querySelector(".chart_container").style.visibility = "visible";
-        document.querySelector(".player_header-block").style.background = "linear-gradient(-45deg, " + color[0] + "," + color[1] + "," + color[2] + "," + color[3];
-        document.querySelector(".player_header-block").style.backgroundSize = "300%";
-        document.querySelector(".player_header-block").style.animation = "animated_color 10s ease-in-out infinite";
+        // document.querySelector(".player_header-block").style.background = "linear-gradient(-45deg, " + color[0] + "," + color[1] + "," + color[2] + "," + color[3];
+        // document.querySelector(".player_header-block").style.backgroundSize = "300%";
+        // document.querySelector(".player_header-block").style.animation = "animated_color 10s ease-in-out infinite";
 
-        document.querySelector(".player_bio-position").innerHTML = player.position;
-        document.querySelector(".player_bio-team").innerHTML = player.team;
-        document.querySelector(".player_bio-height").innerHTML = player.height;
-        document.querySelector(".player_bio-weight").innerHTML = player.weight;
+        document.querySelector(".player_bio-position").innerHTML = player.getPosition();
+        document.querySelector(".player_bio-team").innerHTML = player.getTeam();
+        document.querySelector(".player_bio-height").innerHTML = player.getHeight();
+        document.querySelector(".player_bio-weight").innerHTML = player.getWeight();
+
+        document.querySelector(".player_header-image").src = player.getImage(); 
+        document.querySelector(".name-first").innerHTML = player.getFirstName(); 
+        document.querySelector(".name-last").innerHTML = player.getLasttName(); 
+
+        countAnimation(".points-value", player.getPoints(), 50);
+        countAnimation(".assists-value", player.getAssits(), 300);
+        countAnimation(".steals-value", player.getSteals(), 800);
+        countAnimation(".blocks-value", player.getBlocks(), 800);
 
         const CHART = document.querySelector(".radar_chart");
         const data = {
@@ -66,24 +75,13 @@ function searchPlayer(){
             type: 'line',
             data: data,
             options: {
-            elements: {
-                line: {
-                borderWidth: 3
+                elements: {
+                    line: {
+                    borderWidth: 3
+                    }
                 }
-            }
             },
-            });
-        
-        await countAnimation(".points-value", player.getPoints(), 50);
-        await countAnimation(".assists-value", player.getAssits(), 300);
-        await countAnimation(".steals-value", player.getSteals(), 800);
-        await countAnimation(".blocks-value", player.getBlocks(), 800);
-        
-
-        document.querySelector(".player_header-image").src = player.getImage(); 
-        document.querySelector(".name-first").innerHTML = player.getFirstName(); 
-        document.querySelector(".name-last").innerHTML = player.getLasttName(); 
-
+        });
     }
 
     let countAnimation = (querySelection, targetNumber, speed)=>{

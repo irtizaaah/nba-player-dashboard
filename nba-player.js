@@ -73,8 +73,8 @@ class NbaPlayer{
         this.steals = steals;
     }
 
-    setPointHistory(pointHistory){
-        this.pointHistory = pointHistory;
+    setPointsHistory(pointsHistory){
+        this.pointsHistory = pointsHistory;
     }
 
     //GETTERS
@@ -129,8 +129,8 @@ class NbaPlayer{
     getImage(){
         return this.image;
     }
-    getPointHistory(){
-        return this.pointHistory;
+    getPointsHistory(){
+        return this.pointsHistory;
     }
 }
 

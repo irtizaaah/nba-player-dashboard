@@ -53,7 +53,7 @@ export async function getImage(firstName, lastName){
     }
 }
 
-export async function getPointHistory(id){
+export async function getPointsHistory(id){
     try {
         const year = new Date().getFullYear() - 1;
 
